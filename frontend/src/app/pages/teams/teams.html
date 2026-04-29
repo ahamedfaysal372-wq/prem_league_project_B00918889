@@ -1,0 +1,70 @@
+<div class="teams-page">
+
+  <!-- Full bleed hero -->
+  <div class="teams-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Teams</h1>
+      <p>All clubs competing in the Premier League this season</p>
+    </div>
+    <div class="hero-stat" *ngIf="!loading">
+      <span class="hero-stat-num">{{ teams.length }}</span>
+      <span class="hero-stat-label">Clubs</span>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading"><div class="spinner"></div></div>
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+  <div *ngIf="!loading && !error && teams.length === 0" class="no-results">
+    <div class="no-results-icon">🏟️</div>
+    <h3>No teams found</h3>
+    <p>Check back later</p>
+  </div>
+
+  <div *ngIf="!loading && !error && teams.length > 0" class="teams-grid">
+    <div *ngFor="let team of teams; let i = index"
+      class="team-card"
+      [routerLink]="['/teams', team._id]">
+      <div class="card-bg" [style.background-image]="'url(' + getCardImage(i) + ')'"></div>
+      <div class="card-overlay" [style.background]="getOverlay(i)"></div>
+      <div class="card-content">
+        <div class="card-top">
+          <div class="team-initials">
+            {{ team.short_name || team.name.substring(0,3).toUpperCase() }}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-team-name">{{ team.name }}</div>
+          <div class="card-meta">📍 {{ team.city }}</div>
+          <div class="card-meta">🏟️ {{ team.stadium.name }}</div>
+          <div class="card-meta" *ngIf="team.manager">👤 {{ team.manager }}</div>
+        </div>
+        <div class="card-footer">
+          <div class="card-stat">
+            <span class="card-stat-value">{{ team.stats.played }}</span>
+            <span class="card-stat-label">P</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-value">{{ team.stats.wins }}</span>
+            <span class="card-stat-label">W</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-value">{{ team.stats.draws }}</span>
+            <span class="card-stat-label">D</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-value">{{ team.stats.losses }}</span>
+            <span class="card-stat-label">L</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-value pts">{{ team.stats.points }}</span>
+            <span class="card-stat-label">Pts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

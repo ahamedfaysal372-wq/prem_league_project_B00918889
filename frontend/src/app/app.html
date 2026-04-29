@@ -1,0 +1,7 @@
+<div class="app-wrapper">
+  <app-navbar *ngIf="showNavbar"></app-navbar>
+  <main [class.container]="!isFullBleed()" [class.no-padding]="isAuthPage()">
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer *ngIf="showFooter"></app-footer>
+</div>

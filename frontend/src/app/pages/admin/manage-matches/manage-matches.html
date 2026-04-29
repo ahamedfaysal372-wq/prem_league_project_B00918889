@@ -1,0 +1,165 @@
+<div class="manage-matches-page">
+
+  <!-- Full bleed hero flush with navbar -->
+  <div class="admin-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Manage Matches</h1>
+      <p>Schedule fixtures, go live and record match results</p>
+    </div>
+    <div class="hero-right">
+      <a routerLink="/admin" class="back-btn">← Dashboard</a>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+  <div *ngIf="success" class="alert alert-success">✅ {{ success }}</div>
+
+  <button *ngIf="!showForm && !showFinishForm && !showUpdateScoreForm"
+    (click)="openAddForm()" class="btn-add">
+    + Schedule New Match
+  </button>
+
+  <!-- Schedule Form -->
+  <div *ngIf="showForm" class="form-card">
+    <div class="form-header">
+      <h2>Schedule New Match</h2>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Home Team *</label>
+        <select [(ngModel)]="formData.home_team_id">
+          <option value="">Select home team</option>
+          <option *ngFor="let team of teams" [value]="team._id">{{ team.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Away Team *</label>
+        <select [(ngModel)]="formData.away_team_id">
+          <option value="">Select away team</option>
+          <option *ngFor="let team of teams" [value]="team._id">{{ team.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Match Date *</label>
+        <input type="datetime-local" [(ngModel)]="formData.match_date" />
+      </div>
+      <div class="form-group">
+        <label>Stadium</label>
+        <select [(ngModel)]="formData.stadium">
+          <option value="">Select stadium</option>
+          <option *ngFor="let stadium of stadiums" [value]="stadium">{{ stadium }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button (click)="onSubmit()" class="btn-save">Create Match</button>
+      <button (click)="cancelForm()" class="btn-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Update Score Form -->
+  <div *ngIf="showUpdateScoreForm && updatingMatch" class="form-card live-form">
+    <div class="form-header">
+      <span class="live-badge">● LIVE</span>
+      <h2>Update Score</h2>
+    </div>
+    <div class="match-summary">
+      <span class="match-team">{{ getTeamName(updatingMatch.home_team_id) }}</span>
+      <span class="match-vs">vs</span>
+      <span class="match-team">{{ getTeamName(updatingMatch.away_team_id) }}</span>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>{{ getTeamName(updatingMatch.home_team_id) }} Goals</label>
+        <input type="number" [(ngModel)]="updateScoreData.home_goals" min="0" />
+      </div>
+      <div class="form-group">
+        <label>{{ getTeamName(updatingMatch.away_team_id) }} Goals</label>
+        <input type="number" [(ngModel)]="updateScoreData.away_goals" min="0" />
+      </div>
+    </div>
+    <div class="form-actions">
+      <button (click)="onUpdateScore()" class="btn-save">Update Score</button>
+      <button (click)="cancelForm()" class="btn-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Finish Form -->
+  <div *ngIf="showFinishForm && finishingMatch" class="form-card">
+    <div class="form-header">
+      <h2>Record Final Result</h2>
+    </div>
+    <div class="match-summary">
+      <span class="match-team">{{ getTeamName(finishingMatch.home_team_id) }}</span>
+      <span class="match-vs">vs</span>
+      <span class="match-team">{{ getTeamName(finishingMatch.away_team_id) }}</span>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>{{ getTeamName(finishingMatch.home_team_id) }} Goals</label>
+        <input type="number" [(ngModel)]="finishData.home_goals" min="0" />
+      </div>
+      <div class="form-group">
+        <label>{{ getTeamName(finishingMatch.away_team_id) }} Goals</label>
+        <input type="number" [(ngModel)]="finishData.away_goals" min="0" />
+      </div>
+    </div>
+    <div class="form-actions">
+      <button (click)="onFinishMatch()" class="btn-save">Record Final Result</button>
+      <button (click)="cancelForm()" class="btn-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading"><div class="spinner"></div></div>
+
+  <div *ngIf="!loading" class="table-card">
+    <table class="matches-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Home</th>
+          <th style="text-align:center">Score</th>
+          <th>Away</th>
+          <th>Stadium</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let match of matches" [class.live-row]="match.status === 'live'">
+          <td class="date-cell">{{ match.match_date | date:'dd MMM yy' }}</td>
+          <td><span class="team-name">{{ getTeamName(match.home_team_id) }}</span></td>
+          <td class="score-cell">
+            <span *ngIf="match.score" class="score-display"
+              [class.live-score]="match.status === 'live'">
+              {{ match.score.home_goals }} – {{ match.score.away_goals }}
+            </span>
+            <span *ngIf="!match.score" class="score-vs">vs</span>
+          </td>
+          <td><span class="team-name">{{ getTeamName(match.away_team_id) }}</span></td>
+          <td class="stadium-cell">{{ match.stadium || '—' }}</td>
+          <td>
+            <span class="status-badge"
+              [class.finished]="match.status === 'finished'"
+              [class.scheduled]="match.status === 'scheduled'"
+              [class.live]="match.status === 'live'">
+              {{ match.status === 'live' ? '● LIVE' : match.status }}
+            </span>
+          </td>
+          <td>
+            <div class="action-btns">
+              <button *ngIf="match.status === 'scheduled'" (click)="startMatch(match)" class="btn-action start">Go Live</button>
+              <button *ngIf="match.status === 'scheduled'" (click)="deleteMatch(match)" class="btn-action delete">Delete</button>
+              <button *ngIf="match.status === 'live'" (click)="openUpdateScoreForm(match)" class="btn-action update">Update Score</button>
+              <button *ngIf="match.status === 'live'" (click)="openFinishForm(match)" class="btn-action finish">Full Time</button>
+              <span *ngIf="match.status === 'finished'" class="finished-label">✅ Done</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

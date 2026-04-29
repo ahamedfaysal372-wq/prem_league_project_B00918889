@@ -1,0 +1,156 @@
+<div class="dashboard-page">
+
+  <!-- Full bleed hero -->
+  <div class="admin-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Admin Dashboard</h1>
+      <p>Welcome back, {{ authService.getUser()?.username || authService.getUser()?.name }}</p>
+    </div>
+    <div class="hero-badge">
+      <span>⚙️ Administrator</span>
+    </div>
+  </div>
+  <!-- Live alert -->
+  <div *ngIf="liveMatches.length > 0" class="live-alert">
+    <div class="live-alert-left">
+      <span class="live-dot">●</span>
+      <span class="live-alert-text">{{ liveMatches.length }} match{{ liveMatches.length > 1 ? 'es' : '' }} currently LIVE — update scores or record final results</span>
+    </div>
+    <a routerLink="/admin/matches" class="live-alert-btn">Manage Now →</a>
+  </div>
+
+  <!-- Management -->
+  <div class="section-header">
+    <h2>Management</h2>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="dashboard-card" routerLink="/admin/teams">
+      <div class="card-icon teams">🏟️</div>
+      <div class="card-body">
+        <h2>Manage Teams</h2>
+        <p>Add, edit or delete clubs</p>
+        <div class="card-stat">{{ totalTeams }} teams registered</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </div>
+    <div class="dashboard-card" routerLink="/admin/players">
+      <div class="card-icon players">👤</div>
+      <div class="card-body">
+        <h2>Manage Players</h2>
+        <p>Add, edit or delete players</p>
+        <div class="card-stat">{{ totalPlayers }} players registered</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </div>
+    <div class="dashboard-card" routerLink="/admin/matches">
+      <div class="card-icon matches">📋</div>
+      <div class="card-body">
+        <h2>Manage Matches</h2>
+        <p>Schedule, go live, record results</p>
+        <div class="card-stat">{{ scheduledMatches }} upcoming · {{ totalMatches }} played</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </div>
+  </div>
+
+  <!-- Season Overview -->
+  <div class="section-header">
+    <h2>Season Overview</h2>
+  </div>
+
+  <div class="overview-card">
+
+    <!-- Progress -->
+    <div class="overview-progress">
+      <div class="progress-header">
+        <span class="progress-label">Season Progress</span>
+        <span class="progress-pct">
+          {{ totalMatches + scheduledMatches > 0 ? ((totalMatches / (totalMatches + scheduledMatches)) * 100).toFixed(0) : 0 }}% complete
+        </span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill"
+          [style.width]="(totalMatches + scheduledMatches > 0 ? (totalMatches / (totalMatches + scheduledMatches)) * 100 : 0) + '%'">
+        </div>
+      </div>
+      <div class="progress-legend">
+        <span class="legend-played">■ {{ totalMatches }} played</span>
+        <span class="legend-remaining">■ {{ scheduledMatches }} remaining</span>
+      </div>
+    </div>
+
+    <div class="overview-divider"></div>
+
+    <!-- Bar chart -->
+    <div class="overview-chart">
+      <span class="chart-label">League Activity</span>
+      <div class="chart-bars">
+        <div class="chart-bar-group">
+          <div class="bar-value">{{ totalTeams }}</div>
+          <div class="bar-wrapper">
+            <div class="chart-bar teams-bar" [style.height]="(totalTeams / 20 * 100) + 'px'"></div>
+          </div>
+          <div class="bar-label">Teams</div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="bar-value">{{ totalPlayers }}</div>
+          <div class="bar-wrapper">
+            <div class="chart-bar players-bar" style="height: 100px"></div>
+          </div>
+          <div class="bar-label">Players</div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="bar-value">{{ totalMatches }}</div>
+          <div class="bar-wrapper">
+            <div class="chart-bar played-bar"
+              [style.height]="(totalMatches + scheduledMatches > 0 ? (totalMatches / (totalMatches + scheduledMatches)) * 100 : 0) + 'px'">
+            </div>
+          </div>
+          <div class="bar-label">Played</div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="bar-value">{{ scheduledMatches }}</div>
+          <div class="bar-wrapper">
+            <div class="chart-bar scheduled-bar"
+              [style.height]="(totalMatches + scheduledMatches > 0 ? (scheduledMatches / (totalMatches + scheduledMatches)) * 100 : 0) + 'px'">
+            </div>
+          </div>
+          <div class="bar-label">Left</div>
+        </div>
+        <div class="chart-bar-group">
+          <div class="bar-value" [class.live-val]="liveMatches.length > 0">{{ liveMatches.length }}</div>
+          <div class="bar-wrapper">
+            <div class="chart-bar live-bar"
+              [style.height]="(liveMatches.length > 0 ? 100 : 4) + 'px'"
+              [class.pulsing]="liveMatches.length > 0">
+            </div>
+          </div>
+          <div class="bar-label">Live</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overview-divider"></div>
+
+    <!-- Key numbers -->
+    <div class="overview-numbers">
+      <div class="overview-num-item">
+        <span class="overview-big-num">{{ totalTeams }}</span>
+        <span class="overview-num-label">Clubs</span>
+      </div>
+      <div class="overview-num-item">
+        <span class="overview-big-num">{{ totalPlayers }}</span>
+        <span class="overview-num-label">Players</span>
+      </div>
+      <div class="overview-num-item">
+        <span class="overview-big-num">{{ totalMatches + scheduledMatches }}</span>
+        <span class="overview-num-label">Total Matches</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,90 @@
+<div class="manage-teams-page">
+
+  <div class="admin-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Manage Teams</h1>
+      <p>Add, edit or delete teams in the league</p>
+    </div>
+    <div class="hero-right">
+      <a routerLink="/admin" class="back-btn">← Dashboard</a>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+  <div *ngIf="success" class="alert alert-success">✅ {{ success }}</div>
+
+  <button *ngIf="!showForm" (click)="openAddForm()" class="btn-add">
+    + Add New Team
+  </button>
+
+  <div *ngIf="showForm" class="form-card">
+    <div class="form-header">
+      <h2>{{ editingTeam ? 'Edit Team' : 'Add New Team' }}</h2>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Team Name *</label>
+        <input type="text" [(ngModel)]="formData.name" placeholder="e.g. Arsenal FC" />
+      </div>
+      <div class="form-group">
+        <label>Short Name</label>
+        <input type="text" [(ngModel)]="formData.short_name" placeholder="e.g. ARS" />
+      </div>
+      <div class="form-group">
+        <label>City *</label>
+        <input type="text" [(ngModel)]="formData.city" placeholder="e.g. London" />
+      </div>
+      <div class="form-group">
+        <label>Manager</label>
+        <input type="text" [(ngModel)]="formData.manager" placeholder="e.g. Mikel Arteta" />
+      </div>
+      <div class="form-group">
+        <label>Stadium Name</label>
+        <input type="text" [(ngModel)]="formData.stadium_name" placeholder="e.g. Emirates Stadium" />
+      </div>
+      <div class="form-group">
+        <label>Stadium Capacity</label>
+        <input type="number" [(ngModel)]="formData.stadium_capacity" placeholder="e.g. 60000" />
+      </div>
+    </div>
+    <div class="form-actions">
+      <button (click)="onSubmit()" class="btn-save">{{ editingTeam ? 'Update Team' : 'Create Team' }}</button>
+      <button (click)="cancelForm()" class="btn-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading"><div class="spinner"></div></div>
+
+  <div *ngIf="!loading" class="table-card">
+    <table class="teams-table">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>City</th>
+          <th>Manager</th>
+          <th>Stadium</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let team of teams">
+          <td>
+            <span class="team-name">{{ team.name }}</span>
+          </td>
+          <td>{{ team.city }}</td>
+          <td>{{ team.manager || '—' }}</td>
+          <td>{{ team.stadium.name }}</td>
+          <td>
+            <div class="action-btns">
+              <button (click)="openEditForm(team)" class="btn-action edit">Edit</button>
+              <button (click)="deleteTeam(team)" class="btn-action delete">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

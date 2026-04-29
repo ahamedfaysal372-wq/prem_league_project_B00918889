@@ -1,0 +1,75 @@
+.page-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #0a1628 0%, #0d1f3c 100%);
+  border-radius: 16px;
+  color: white;
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.page-header p {
+  color: rgba(255,255,255,0.7);
+  font-size: 1.1rem;
+}
+
+.content-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+  border-left: 4px solid #10b981;
+}
+
+.content-card h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #0a1628;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.content-card p {
+  color: #555;
+  line-height: 1.8;
+  font-size: 0.93rem;
+}
+
+.terms-item {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.terms-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.terms-item h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0a1628;
+  margin-bottom: 0.5rem;
+}
+
+.terms-item p {
+  color: #555;
+  line-height: 1.8;
+  font-size: 0.93rem;
+}

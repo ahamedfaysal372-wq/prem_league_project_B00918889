@@ -1,0 +1,120 @@
+<div class="matches-page">
+
+  <!-- Full bleed hero flush with navbar -->
+  <div class="matches-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Matches</h1>
+      <p>Premier League 2025/26 — Fixtures & Results</p>
+    </div>
+    <div class="hero-stats" *ngIf="!loading">
+      <div class="hero-stat">
+        <span class="hero-stat-num">{{ matches.length }}</span>
+        <span class="hero-stat-label">Total</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">{{ finishedCount }}</span>
+        <span class="hero-stat-label">Finished</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">{{ scheduledCount }}</span>
+        <span class="hero-stat-label">Upcoming</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live banner -->
+  <div *ngIf="liveMatches.length > 0" class="live-banner">
+    <div class="live-header">
+      <div class="live-indicator">
+        <span class="live-dot">●</span>
+        <span>LIVE</span>
+      </div>
+      <span class="live-count">{{ liveMatches.length }} match{{ liveMatches.length > 1 ? 'es' : '' }} in progress</span>
+    </div>
+    <div class="live-matches-grid">
+      <div *ngFor="let match of liveMatches" class="live-match-card">
+        <div class="live-match-teams">
+          <div class="live-team">
+            <div class="live-team-badge">{{ getTeamInitials(match.home_team_id) }}</div>
+            <span>{{ getTeamName(match.home_team_id) }}</span>
+          </div>
+          <div class="live-score">{{ match.score?.home_goals }} – {{ match.score?.away_goals }}</div>
+          <div class="live-team right">
+            <div class="live-team-badge">{{ getTeamInitials(match.away_team_id) }}</div>
+            <span>{{ getTeamName(match.away_team_id) }}</span>
+          </div>
+        </div>
+        <div class="live-stadium">{{ match.stadium }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <div class="filters">
+    <select [(ngModel)]="selectedStatus" (change)="onFilterChange()" class="filter-select">
+      <option value="">All Matches</option>
+      <option value="scheduled">Scheduled</option>
+      <option value="finished">Finished</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading"><div class="spinner"></div></div>
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+  <div *ngIf="!loading && !error && matches.length === 0" class="no-results">
+    <div class="no-results-icon">📅</div>
+    <h3>No matches found</h3>
+    <p>Try changing the filter above</p>
+  </div>
+
+  <div *ngIf="!loading && !error && matches.length > 0" class="table-card">
+    <table class="matches-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Home</th>
+          <th style="text-align:center">Score</th>
+          <th>Away</th>
+          <th>Stadium</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let match of matches">
+          <td class="date-cell">{{ match.match_date | date:'dd MMM yyyy' }}</td>
+          <td>
+            <div class="team-cell">
+              <div class="team-badge">{{ getTeamInitials(match.home_team_id) }}</div>
+              <span>{{ getTeamName(match.home_team_id) }}</span>
+            </div>
+          </td>
+          <td class="score-cell">
+            <span *ngIf="match.status === 'finished' && match.score" class="score-display">
+              {{ match.score.home_goals }} – {{ match.score.away_goals }}
+            </span>
+            <span *ngIf="match.status === 'scheduled'" class="score-vs">vs</span>
+          </td>
+          <td>
+            <div class="team-cell">
+              <div class="team-badge">{{ getTeamInitials(match.away_team_id) }}</div>
+              <span>{{ getTeamName(match.away_team_id) }}</span>
+            </div>
+          </td>
+          <td class="stadium-cell">{{ match.stadium || '—' }}</td>
+          <td>
+            <span class="status-badge"
+              [class.finished]="match.status === 'finished'"
+              [class.scheduled]="match.status === 'scheduled'">
+              {{ match.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

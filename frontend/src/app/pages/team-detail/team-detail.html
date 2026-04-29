@@ -1,0 +1,137 @@
+<div class="team-detail-page" *ngIf="!loading && !error && team">
+
+  <!-- Full bleed hero flush with navbar -->
+  <div class="team-hero">
+    <div class="hero-bg" [style.background-image]="'url(' + getHeaderImage() + ')'"></div>
+    <div class="hero-overlay" [style.background]="getHeaderOverlay()"></div>
+    <div class="hero-left">
+      <a routerLink="/teams" class="back-btn">← Back to Teams</a>
+      <div class="hero-content">
+        <div class="team-badge">
+          {{ team.short_name || team.name.substring(0,3).toUpperCase() }}
+        </div>
+        <div class="hero-info">
+          <h1>{{ team.name }}</h1>
+          <p>{{ team.city }} · {{ team.stadium.name }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-value">{{ team.stats.points }}</span>
+        <span class="hero-stat-label">Points</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">{{ team.stats.played }}</span>
+        <span class="hero-stat-label">Played</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">{{ getWinRate() }}%</span>
+        <span class="hero-stat-label">Win Rate</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">{{ team.stats.gf }}</span>
+        <span class="hero-stat-label">Goals</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="detail-grid">
+
+    <!-- Club Info -->
+    <div class="detail-card">
+      <div class="section-header">
+        <h2>Club Info</h2>
+      </div>
+      <div class="info-row">
+        <span class="info-label">City</span>
+        <span class="info-value">{{ team.city }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Short Name</span>
+        <span class="info-value">{{ team.short_name || '—' }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Manager</span>
+        <span class="info-value">{{ team.manager || 'TBA' }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Stadium</span>
+        <span class="info-value">{{ team.stadium.name }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Capacity</span>
+        <span class="info-value">{{ team.stadium.capacity | number }}</span>
+      </div>
+    </div>
+
+    <!-- Season Stats -->
+    <div class="detail-card">
+      <div class="section-header">
+        <h2>Season Stats</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">{{ team.stats.played }}</div>
+          <div class="stat-label">Played</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number win">{{ team.stats.wins }}</div>
+          <div class="stat-label">Wins</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number draw">{{ team.stats.draws }}</div>
+          <div class="stat-label">Draws</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number loss">{{ team.stats.losses }}</div>
+          <div class="stat-label">Losses</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ team.stats.gf }}</div>
+          <div class="stat-label">Goals For</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{{ team.stats.ga }}</div>
+          <div class="stat-label">Goals Against</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number"
+            [class.positive]="getGoalDiff() > 0"
+            [class.negative]="getGoalDiff() < 0">
+            {{ getGoalDiff() > 0 ? '+' : '' }}{{ getGoalDiff() }}
+          </div>
+          <div class="stat-label">Goal Diff</div>
+        </div>
+        <div class="stat-item highlight">
+          <div class="stat-number pts">{{ team.stats.points }}</div>
+          <div class="stat-label">Points</div>
+        </div>
+      </div>
+
+      <div class="win-rate-section">
+        <div class="win-rate-header">
+          <span class="win-rate-label">Win Rate</span>
+          <span class="win-rate-value">{{ getWinRate() }}%</span>
+        </div>
+        <div class="win-rate-bar">
+          <div class="win-rate-fill" [style.width]="getWinRate() + '%'"></div>
+        </div>
+        <div class="form-breakdown">
+          <span class="form-w">W {{ team.stats.wins }}</span>
+          <span class="form-d">D {{ team.stats.draws }}</span>
+          <span class="form-l">L {{ team.stats.losses }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="loading" class="loading"><div class="spinner"></div></div>
+<div *ngIf="error" class="error-msg">{{ error }}</div>

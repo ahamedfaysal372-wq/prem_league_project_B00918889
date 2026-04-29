@@ -1,0 +1,118 @@
+<nav class="navbar">
+
+  <a class="navbar-brand" routerLink="/home">
+    <div class="logo">⚽</div>
+    <div class="brand-text">
+      <span class="top">Football</span>
+      <span class="bottom">Premier <span>League</span></span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+    <li><a routerLink="/teams" routerLinkActive="active">Teams</a></li>
+    <li><a routerLink="/players" routerLinkActive="active">Players</a></li>
+    <li><a routerLink="/matches" routerLinkActive="active">Matches</a></li>
+    <li *ngIf="authService.isAdmin()"><a routerLink="/admin" routerLinkActive="active">Admin</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <div *ngIf="authService.isLoggedIn()" class="profile-wrapper">
+
+      <button class="profile-btn" (click)="toggleDropdown()">
+        <div class="profile-avatar">
+          {{ (authService.getUser()?.username || authService.getUser()?.name)?.charAt(0)?.toUpperCase() }}
+        </div>
+        <span class="profile-name">
+          {{ authService.getUser()?.username || authService.getUser()?.name }}
+        </span>
+        <span class="profile-arrow">{{ dropdownOpen ? '▲' : '▼' }}</span>
+      </button>
+
+      <div class="profile-dropdown" *ngIf="dropdownOpen">
+
+        <div class="dropdown-header">
+          <div class="dropdown-avatar">
+            {{ (authService.getUser()?.username || authService.getUser()?.name)?.charAt(0)?.toUpperCase() }}
+          </div>
+          <div class="dropdown-user-info">
+            <div class="dropdown-name">{{ authService.getUser()?.username || authService.getUser()?.name }}</div>
+            <div class="dropdown-email">{{ authService.getUser()?.email }}</div>
+            <div class="dropdown-role">
+              {{ authService.getUser()?.role === 'admin' ? '⚙️ Administrator' : '👤 Member' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin — panel + sign out only -->
+        <ng-container *ngIf="authService.isAdmin()">
+          <a routerLink="/admin" class="dropdown-item" (click)="closeDropdown()">
+            ⚙️ Admin Panel
+          </a>
+          <div class="dropdown-divider"></div>
+          <button
+            class="dropdown-item logout-item"
+            (click)="logout()"
+            style="color: #e63946; font-weight: 700;">
+            🚪 Sign Out
+          </button>
+        </ng-container>
+
+        <!-- Regular users — full dropdown -->
+        <ng-container *ngIf="!authService.isAdmin()">
+
+          <div class="acc-row" (click)="$event.stopPropagation(); toggle('favteam')">
+            <div class="acc-left">
+              <span>🏆</span>
+              <span class="acc-label">Favourite Team</span>
+            </div>
+            <div class="acc-right">
+              <span class="acc-hint" *ngIf="!openFavTeam">{{ getFavouriteTeamName() }}</span>
+              <span class="acc-arrow" [class.open]="openFavTeam">▾</span>
+            </div>
+          </div>
+          <div class="acc-content" [class.open]="openFavTeam">
+            <div *ngIf="saveSuccess" class="save-success">✅ Saved!</div>
+            <div class="fav-row" *ngIf="getFavouriteTeamName() !== 'Not selected'">
+              <div class="fav-badge">{{ getFavouriteTeamName().substring(0,3).toUpperCase() }}</div>
+              <div class="fav-info">
+                <span class="fav-name">{{ getFavouriteTeamName() }}</span>
+                <span class="fav-sub">Premier League 2025/26</span>
+              </div>
+            </div>
+            <div class="settings-group">
+              <label>Change Team</label>
+              <select [(ngModel)]="favouriteTeam">
+                <option value="">No favourite team</option>
+                <option *ngFor="let team of teams" [value]="team._id">{{ team.name }}</option>
+              </select>
+            </div>
+            <button class="btn-save" (click)="saveFavTeam()">Save</button>
+          </div>
+
+          <div class="acc-row" (click)="$event.stopPropagation(); navigateTo('/settings')">
+            <div class="acc-left">
+              <span>⚙️</span>
+              <span class="acc-label">Account Settings</span>
+            </div>
+            <div class="acc-right">
+              <span class="acc-arrow-nav">→</span>
+            </div>
+          </div>
+
+          <div class="dropdown-divider"></div>
+
+          <button
+            class="dropdown-item logout-item"
+            (click)="logout()"
+            style="color: #e63946; font-weight: 700;">
+            🚪 Sign Out
+          </button>
+
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+
+</nav>

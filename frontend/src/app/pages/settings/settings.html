@@ -1,0 +1,78 @@
+<div class="settings-page-wrapper">
+  <div class="settings-page">
+
+    <div class="settings-header">
+      <div class="header-left">
+        <a routerLink="/home" class="back-btn">← Back</a>
+        <div>
+          <h1>Account Settings</h1>
+          <p>Manage your profile and preferences</p>
+        </div>
+      </div>
+      <div class="header-avatar">{{ getInitial() }}</div>
+    </div>
+
+    <div class="settings-card">
+
+      <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+      <div *ngIf="success" class="alert alert-success">✅ {{ success }}</div>
+
+      <div class="section-title">Account Information</div>
+
+      <div class="info-row">
+        <span class="info-label">Role</span>
+        <span class="role-badge" [class.admin]="user?.role === 'admin'">
+          {{ user?.role === 'admin' ? '⚙️ Administrator' : '👤 Member' }}
+        </span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Favourite Team</span>
+        <span class="info-value green">{{ getFavouriteTeamName() }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Season</span>
+        <span class="info-value">2025/26</span>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-title">Edit Profile</div>
+
+      <div class="form-group">
+        <label>Display Name</label>
+        <input type="text" [(ngModel)]="displayName" placeholder="Your display name" />
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" [(ngModel)]="email" disabled placeholder="Your email" />
+        <span class="field-note">Email address cannot be changed</span>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" value="••••••••" disabled />
+        <span class="field-note">Password changes are not available yet</span>
+      </div>
+
+      <div class="form-group">
+        <label>Favourite Team</label>
+        <select [(ngModel)]="favouriteTeam">
+          <option value="">No favourite team</option>
+          <option *ngFor="let team of teams" [value]="team._id">{{ team.name }}</option>
+        </select>
+      </div>
+
+      <button class="btn-save" (click)="saveProfile()" [disabled]="loading">
+        {{ loading ? 'Saving...' : 'Save Changes' }}
+      </button>
+
+    </div>
+
+    <button class="btn-logout" (click)="logout()">
+      🚪 Sign Out
+    </button>
+
+  </div>
+</div>

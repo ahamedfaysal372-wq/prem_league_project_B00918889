@@ -1,0 +1,235 @@
+<div class="home-page">
+
+  <!-- FULL BLEED HERO SECTION -->
+  <div class="hero-section">
+    <div class="carousel">
+      <div class="carousel-track">
+        <div *ngFor="let slide of slides; let i = index"
+          class="carousel-slide"
+          [class.active]="i === currentSlide"
+          [style.background-image]="'url(' + slide.image + ')'">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="slide-title">{{ slide.title }}</h1>
+            <p class="slide-subtitle">{{ slide.subtitle }}</p>
+            <a [routerLink]="slide.link" class="slide-cta">{{ slide.cta }} →</a>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-btn prev" (click)="prevSlide()">&#8249;</button>
+      <button class="carousel-btn next" (click)="onNextClick()">&#8250;</button>
+      <div class="carousel-dots">
+        <button *ngFor="let slide of slides; let i = index"
+          class="dot" [class.active]="i === currentSlide"
+          (click)="goToSlide(i)">
+        </button>
+      </div>
+      <div class="carousel-live-badge" *ngIf="liveMatches.length > 0">
+        <span class="live-dot">●</span> {{ liveMatches.length }} LIVE
+      </div>
+    </div>
+
+    <!-- Stats strip directly below carousel, same full width -->
+    <div class="stats-strip">
+      <div class="strip-stat">
+        <span class="strip-number">{{ totalTeams }}</span>
+        <span class="strip-label">Clubs</span>
+      </div>
+      <div class="strip-divider"></div>
+      <div class="strip-stat">
+        <span class="strip-number">{{ totalPlayers }}</span>
+        <span class="strip-label">Players</span>
+      </div>
+      <div class="strip-divider"></div>
+      <div class="strip-stat">
+        <span class="strip-number">{{ totalMatches }}</span>
+        <span class="strip-label">Matches Played</span>
+      </div>
+      <div class="strip-divider"></div>
+      <div class="strip-stat">
+        <span class="strip-number">2025/26</span>
+        <span class="strip-label">Season</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE CONTENT — padded -->
+  <div class="page-content">
+
+    <!-- LIVE BANNER -->
+    <div *ngIf="liveMatches.length > 0" class="live-banner">
+      <div class="live-header">
+        <div class="live-indicator">
+          <span class="live-dot">●</span>
+          <span>LIVE</span>
+        </div>
+        <span class="live-count">{{ liveMatches.length }} match{{ liveMatches.length > 1 ? 'es' : '' }} in progress</span>
+      </div>
+      <div class="live-matches-grid">
+        <div *ngFor="let match of liveMatches" class="live-match-card">
+          <div class="live-match-teams">
+            <div class="live-team">
+              <div class="live-team-badge">{{ getTeamInitials(match.home_team_id) }}</div>
+              <span>{{ getTeamName(match.home_team_id) }}</span>
+            </div>
+            <div class="live-score">{{ match.score?.home_goals }} – {{ match.score?.away_goals }}</div>
+            <div class="live-team right">
+              <div class="live-team-badge">{{ getTeamInitials(match.away_team_id) }}</div>
+              <span>{{ getTeamName(match.away_team_id) }}</span>
+            </div>
+          </div>
+          <div class="live-stadium">{{ match.stadium }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="main-grid">
+
+      <!-- LEFT — League Table -->
+      <div class="main-left">
+        <div class="section-header">
+          <h2>League Table</h2>
+          <div class="season-dropdown-wrapper">
+            <button class="season-btn" (click)="toggleSeasonDropdown()">
+              {{ selectedSeason }} ▾
+            </button>
+            <div class="season-dropdown" *ngIf="seasonDropdownOpen">
+              <div class="season-option" *ngFor="let season of seasons"
+                (click)="selectSeason(season)"
+                [class.active]="season === selectedSeason">
+                {{ season }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="loading" class="loading">
+          <div class="spinner"></div>
+        </div>
+
+        <div *ngIf="!loading && selectedSeason !== '2025/26 Season'" class="no-data-season">
+          <p>No data available for {{ selectedSeason }}</p>
+        </div>
+
+        <div *ngIf="!loading && selectedSeason === '2025/26 Season'" class="table-card">
+          <table class="league-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Club</th>
+                <th>P</th>
+                <th>W</th>
+                <th>D</th>
+                <th>L</th>
+                <th>GD</th>
+                <th>Pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of table; let i = index"
+                [routerLink]="['/teams', row.team_id]"
+                [class.champions]="i === 0"
+                [class.european]="i >= 1 && i < 4"
+                [class.relegation]="i >= table.length - 3">
+                <td>
+                  <span class="pos-num"
+                    [class.top1]="i === 0"
+                    [class.top4]="i >= 1 && i < 4">
+                    {{ i + 1 }}
+                  </span>
+                </td>
+                <td>
+                  <div class="table-team-cell">
+                    <div class="table-badge">{{ row.name.substring(0,3).toUpperCase() }}</div>
+                    <span class="team-name">{{ row.name }}</span>
+                  </div>
+                </td>
+                <td>{{ row.played }}</td>
+                <td>{{ row.wins }}</td>
+                <td>{{ row.draws }}</td>
+                <td>{{ row.losses }}</td>
+                <td [class.gd-pos]="row.gd > 0" [class.gd-neg]="row.gd < 0">
+                  {{ row.gd > 0 ? '+' + row.gd : row.gd }}
+                </td>
+                <td><strong class="pts">{{ row.points }}</strong></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-legend">
+            <div class="legend-item">
+              <span class="legend-dot champion"></span>
+              <span>Champion</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot european"></span>
+              <span>European</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot relegation"></span>
+              <span>Relegation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT — Results + Fixtures -->
+      <div class="main-right">
+
+        <div class="side-section">
+          <div class="section-header">
+            <h2>Recent Results</h2>
+            <a routerLink="/matches" class="view-all">View all</a>
+          </div>
+          <div class="matches-card">
+            <div *ngIf="recentMatches.length === 0" class="no-data">No recent results</div>
+            <div *ngFor="let match of recentMatches" class="match-row">
+              <div class="match-inner">
+                <div class="match-team home">
+                  <div class="match-badge">{{ getTeamInitials(match.home_team_id) }}</div>
+                  <span>{{ getTeamName(match.home_team_id) }}</span>
+                </div>
+                <div class="match-score-block">
+                  <span class="match-score">{{ match.score?.home_goals }} – {{ match.score?.away_goals }}</span>
+                  <span class="match-status">FT</span>
+                </div>
+                <div class="match-team away">
+                  <div class="match-badge">{{ getTeamInitials(match.away_team_id) }}</div>
+                  <span>{{ getTeamName(match.away_team_id) }}</span>
+                </div>
+              </div>
+              <div class="match-venue">{{ match.stadium }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-section">
+          <div class="section-header">
+            <h2>Upcoming Fixtures</h2>
+            <a routerLink="/matches" class="view-all">View all</a>
+          </div>
+          <div class="matches-card">
+            <div *ngIf="upcomingMatches.length === 0" class="no-data">No upcoming fixtures</div>
+            <div *ngFor="let match of upcomingMatches" class="match-row fixture">
+              <div class="fixture-date">{{ match.match_date | date:'EEE d MMM' }}</div>
+              <div class="match-inner">
+                <div class="match-team home">
+                  <div class="match-badge">{{ getTeamInitials(match.home_team_id) }}</div>
+                  <span>{{ getTeamName(match.home_team_id) }}</span>
+                </div>
+                <div class="match-score-block">
+                  <span class="vs-text">vs</span>
+                </div>
+                <div class="match-team away">
+                  <div class="match-badge">{{ getTeamInitials(match.away_team_id) }}</div>
+                  <span>{{ getTeamName(match.away_team_id) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

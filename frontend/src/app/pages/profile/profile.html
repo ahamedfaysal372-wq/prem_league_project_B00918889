@@ -1,0 +1,157 @@
+<div class="profile-page">
+  <div class="profile-card">
+
+    <!-- User header — always visible -->
+    <div class="profile-header">
+      <div class="profile-avatar">{{ getInitial() }}</div>
+      <div class="profile-info">
+        <h2>{{ user?.username || user?.name }}</h2>
+        <p>{{ user?.email }}</p>
+        <span class="member-badge" [class.admin]="user?.role === 'admin'">
+          {{ user?.role === 'admin' ? '⚙️ Administrator' : '👤 Member' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Quick nav icons — always visible -->
+    <div class="icon-grid">
+      <a class="icon-item" routerLink="/home">
+        <div class="icon-box">📊</div>
+        <span>Standings</span>
+      </a>
+      <a class="icon-item" routerLink="/teams">
+        <div class="icon-box">🏟️</div>
+        <span>Teams</span>
+      </a>
+      <a class="icon-item" routerLink="/players">
+        <div class="icon-box">🏃</div>
+        <span>Players</span>
+      </a>
+      <a class="icon-item" routerLink="/matches">
+        <div class="icon-box">⚽</div>
+        <span>Matches</span>
+      </a>
+    </div>
+
+    <!-- Accordion sections -->
+    <div class="accordion">
+
+      <!-- Favourite Team -->
+      <div class="accordion-item">
+        <button class="accordion-row" (click)="toggle('favteam')">
+          <div class="accordion-left">
+            <span class="accordion-icon">🏆</span>
+            <span class="accordion-label">Favourite Team</span>
+          </div>
+          <div class="accordion-right">
+            <span class="accordion-hint" *ngIf="!openFavTeam">
+              {{ getFavouriteTeamName() }}
+            </span>
+            <span class="accordion-arrow" [class.open]="openFavTeam">▾</span>
+          </div>
+        </button>
+
+        <div class="accordion-content" [class.open]="openFavTeam">
+          <div class="fav-team-row" *ngIf="getFavouriteTeamName() !== 'Not selected'">
+            <div class="fav-badge">
+              {{ getFavouriteTeamName().substring(0,3).toUpperCase() }}
+            </div>
+            <div class="fav-info">
+              <span class="fav-name">{{ getFavouriteTeamName() }}</span>
+              <span class="fav-sub">Premier League 2025/26</span>
+            </div>
+          </div>
+          <div class="fav-empty" *ngIf="getFavouriteTeamName() === 'Not selected'">
+            No favourite team selected — update in Settings
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="accordion-item">
+        <button class="accordion-row" (click)="toggle('activity')">
+          <div class="accordion-left">
+            <span class="accordion-icon">📋</span>
+            <span class="accordion-label">Recent Activity</span>
+          </div>
+          <div class="accordion-right">
+            <span class="accordion-hint" *ngIf="!openActivity">
+              {{ recentMatches.length }} matches
+            </span>
+            <span class="accordion-arrow" [class.open]="openActivity">▾</span>
+          </div>
+        </button>
+
+        <div class="accordion-content" [class.open]="openActivity">
+          <div *ngIf="recentMatches.length === 0" class="empty-state">
+            No recent activity
+          </div>
+          <div class="activity-list">
+            <div *ngFor="let match of recentMatches" class="activity-item">
+              <div class="activity-icon">⚽</div>
+              <div class="activity-info">
+                <span class="activity-teams">
+                  {{ getTeamName(match.home_team_id) }}
+                  <strong>{{ match.score?.home_goals }} – {{ match.score?.away_goals }}</strong>
+                  {{ getTeamName(match.away_team_id) }}
+                </span>
+                <span class="activity-meta">{{ match.stadium }}</span>
+              </div>
+              <span class="ft-badge">FT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="accordion-item">
+        <button class="accordion-row" (click)="toggle('settings')">
+          <div class="accordion-left">
+            <span class="accordion-icon">⚙️</span>
+            <span class="accordion-label">Settings</span>
+          </div>
+          <div class="accordion-right">
+            <span class="accordion-hint" *ngIf="!openSettings">Edit profile</span>
+            <span class="accordion-arrow" [class.open]="openSettings">▾</span>
+          </div>
+        </button>
+
+        <div class="accordion-content" [class.open]="openSettings">
+          <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+          <div *ngIf="success" class="alert alert-success">✅ {{ success }}</div>
+
+          <div class="form-group">
+            <label>Display Name</label>
+            <input type="text" [(ngModel)]="displayName" placeholder="Your display name" />
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="email" disabled placeholder="Your email" />
+            <span class="field-note">Email cannot be changed</span>
+          </div>
+
+          <div class="form-group">
+            <label>Favourite Team</label>
+            <select [(ngModel)]="favouriteTeam">
+              <option value="">Select your favourite team</option>
+              <option *ngFor="let team of teams" [value]="team._id">{{ team.name }}</option>
+            </select>
+          </div>
+
+          <button class="btn-save" (click)="saveProfile()" [disabled]="loading">
+            {{ loading ? 'Saving...' : 'Save Changes' }}
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Log out -->
+    <a routerLink="/" class="logout-row" (click)="authService.logout()">
+      <span>🚪</span>
+      <span>Log Out</span>
+    </a>
+
+  </div>
+</div>

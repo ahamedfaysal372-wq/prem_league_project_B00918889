@@ -1,0 +1,91 @@
+<div class="players-page">
+
+  <!-- Full bleed hero -->
+  <div class="players-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Players</h1>
+      <p>Browse all players in the Premier League 2025/26</p>
+    </div>
+    <div class="hero-stat" *ngIf="!loading">
+      <span class="hero-stat-num">{{ total }}</span>
+      <span class="hero-stat-label">Players</span>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <input
+      type="text"
+      placeholder="Search players..."
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+      class="search-input"
+    />
+    <select [(ngModel)]="selectedPosition" (change)="onSearch()" class="filter-select">
+      <option value="">All Positions</option>
+      <option value="GK">Goalkeeper</option>
+      <option value="DF">Defender</option>
+      <option value="MF">Midfielder</option>
+      <option value="FW">Forward</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+  </div>
+
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+  <div *ngIf="!loading && !error && players.length === 0" class="no-results">
+    <div class="no-results-icon">🔍</div>
+    <h3>No players found</h3>
+    <p>Try a different search or filter</p>
+  </div>
+
+  <div *ngIf="!loading && !error && players.length > 0" class="table-card">
+    <table class="players-table">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Pos</th>
+          <th>Nationality</th>
+          <th>Age</th>
+          <th>#</th>
+          <th>Apps</th>
+          <th>Goals</th>
+          <th>Assists</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let player of players">
+          <td>
+            <div class="player-name-cell">
+              <div class="player-badge">{{ player.name.charAt(0).toUpperCase() }}</div>
+              <span class="player-name">{{ player.name }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="position-badge" [class]="'pos-' + player.position.toLowerCase()">
+              {{ player.position }}
+            </span>
+          </td>
+          <td>{{ player.nationality }}</td>
+          <td>{{ player.age }}</td>
+          <td>{{ player.squad_number }}</td>
+          <td>{{ player.stats.appearances }}</td>
+          <td><strong>{{ player.stats.goals }}</strong></td>
+          <td>{{ player.stats.assists }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && totalPages > 1" class="pagination">
+    <button (click)="prevPage()" [disabled]="page === 1" class="page-btn">← Prev</button>
+    <span class="page-info">Page {{ page }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="page === totalPages" class="page-btn">Next →</button>
+  </div>
+
+</div>

@@ -1,0 +1,511 @@
+.dashboard-page { padding: 0; }
+
+.admin-hero {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  margin-left: -50vw;
+  height: 200px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 0;
+  margin-top: -2rem;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1600&q=80');
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+
+.admin-hero:hover .hero-bg { transform: scale(1.03); }
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.88) 0%,
+    rgba(0,0,0,0.4) 55%,
+    rgba(0,0,0,0.05) 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 2rem 4rem;
+  cursor: default;
+  transition: all 0.25s ease;
+}
+
+.hero-content:hover { transform: scale(1.03); }
+.hero-content:hover h1 { color: #10b981; }
+.hero-content:hover p { color: rgba(255,255,255,0.95); }
+
+.hero-content h1 {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: white;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.5px;
+  transition: all 0.25s ease;
+}
+
+.hero-content p {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+  transition: all 0.25s ease;
+}
+
+.hero-badge {
+  position: relative;
+  z-index: 1;
+  padding: 2rem 4rem;
+  display: flex;
+  align-items: center;
+}
+
+.hero-badge span {
+  background: rgba(16,185,129,0.15);
+  border: 1px solid rgba(16,185,129,0.4);
+  color: #10b981;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+  cursor: default;
+}
+
+.hero-badge span:hover {
+  background: #10b981;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Live alert */
+.live-alert {
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #dc2626;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.live-alert-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.live-dot {
+  color: #dc2626;
+  font-size: 0.85rem;
+  animation: pulseLive 1s ease-in-out infinite;
+}
+
+.live-alert-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.live-alert-btn {
+  background: #dc2626;
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.live-alert-btn:hover {
+  background: #b91c1c;
+  transform: scale(1.04);
+}
+
+/* Section header */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  padding-left: 0.85rem;
+  border-left: 4px solid #0a1628;
+  cursor: default;
+}
+
+.section-header h2 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0a1628;
+  margin: 0;
+  transition: all 0.2s ease;
+}
+
+.section-header:hover h2 {
+  color: #10b981;
+  transform: scale(1.03);
+
+}
+
+/* Management cards */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.75rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  text-decoration: none;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: #10b981;
+  box-shadow: 0 10px 30px rgba(16,185,129,0.15);
+}
+
+.dashboard-card:hover .card-arrow { color: #10b981; transform: translateX(5px); }
+.dashboard-card:hover .card-body h2 { color: #10b981; }
+.dashboard-card:hover .card-icon { transform: scale(1.1); }
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.card-icon.teams { background: #dbeafe; }
+.card-icon.players { background: #dcfce7; }
+.card-icon.matches { background: #fef3c7; }
+
+.card-body { flex: 1; }
+
+.card-body h2 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0a1628;
+  margin: 0 0 0.2rem;
+  transition: all 0.2s ease;
+}
+
+.card-body p {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin: 0 0 0.4rem;
+}
+
+.card-stat {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.card-arrow {
+  font-size: 1rem;
+  color: #cbd5e1;
+  font-weight: 700;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+/* Season overview */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.overview-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: all 0.25s ease;
+  cursor: default;
+}
+
+.overview-card:hover {
+  border-color: #10b981;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(16,185,129,0.12);
+}
+
+.overview-card:hover .overview-num { color: #10b981; }
+
+.overview-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.overview-num {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #0a1628;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.overview-label {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.25rem;
+}
+/* Season overview card */
+.overview-card {
+  background: linear-gradient(135deg, #0a1628 0%, #0d1f3c 100%);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.overview-divider {
+  width: 1px;
+  height: 120px;
+  background: rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+/* Progress bar */
+.overview-progress {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.progress-pct {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #10b981;
+}
+
+.progress-bar-track {
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #059669);
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+
+.progress-legend {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.legend-played {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #10b981;
+}
+
+.legend-remaining {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.25);
+}
+
+/* Mini bar chart */
+.overview-chart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.chart-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  height: 140px;
+}
+
+.chart-bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+}
+
+.bar-value {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 0.35rem;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.bar-value.live-val { color: #dc2626; }
+
+.bar-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.chart-bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  transition: all 0.8s ease;
+  min-height: 4px;
+}
+
+.bar-label {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.35);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 0.35rem;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.teams-bar { background: #3b82f6; }
+.players-bar { background: #10b981; }
+.played-bar { background: rgba(255,255,255,0.6); }
+.scheduled-bar { background: rgba(255,255,255,0.2); }
+.live-bar { background: #dc2626; }
+
+.live-bar.pulsing {
+  animation: barPulse 1s ease-in-out infinite;
+}
+
+@keyframes barPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.chart-bar-label {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.35);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.chart-bar-val {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: white;
+}
+
+.chart-bar-val.live-val { color: #dc2626; }
+
+/* Key numbers */
+.overview-numbers {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.overview-num-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  cursor: default;
+  transition: all 0.2s ease;
+}
+
+.overview-num-item:hover .overview-big-num { color: #10b981; }
+
+.overview-big-num {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.overview-num-label {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.35);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

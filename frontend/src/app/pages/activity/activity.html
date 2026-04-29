@@ -1,0 +1,42 @@
+<div class="activity-page-wrapper">
+  <div class="activity-page">
+
+    <div class="page-header">
+      <a routerLink="/home" class="back-btn">← Back</a>
+      <div class="header-text">
+        <h1>Recent Activity</h1>
+        <p>All finished match results</p>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading matches...</p>
+    </div>
+
+    <div *ngIf="!loading" class="matches-list">
+      <div *ngFor="let match of matches" class="match-card">
+        <div class="match-teams">
+          <div class="team-block">
+            <div class="team-badge">{{ getInitials(match.home_team_id) }}</div>
+            <span class="team-name">{{ getTeamName(match.home_team_id) }}</span>
+          </div>
+          <div class="score-block">
+            <span class="score">{{ match.score?.home_goals }} – {{ match.score?.away_goals }}</span>
+            <span class="ft-tag">FT</span>
+          </div>
+          <div class="team-block right">
+            <div class="team-badge">{{ getInitials(match.away_team_id) }}</div>
+            <span class="team-name">{{ getTeamName(match.away_team_id) }}</span>
+          </div>
+        </div>
+        <div class="match-meta">{{ match.stadium || 'Premier League' }}</div>
+      </div>
+
+      <div *ngIf="matches.length === 0" class="empty">
+        No match results yet
+      </div>
+    </div>
+
+  </div>
+</div>
