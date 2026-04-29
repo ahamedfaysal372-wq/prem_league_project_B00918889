@@ -41,7 +41,7 @@ A fully functional Premier League management platform where users can track live
 
 ## 🏗️ Architecture
 
-\`\`\`mermaid
+```mermaid
 graph TD
     A[Client Browser] --> B[Angular 21 Frontend]
     B --> C[HTTP REST API Calls]
@@ -68,13 +68,13 @@ graph TD
     F --> F2[(teams)]
     F --> F3[(players)]
     F --> F4[(matches)]
-\`\`\`
+```
 
 ---
 
 ## 🔐 Authentication Flow
 
-\`\`\`mermaid
+```mermaid
 flowchart TD
     A[User visits app] --> B{Public route?}
     B -->|Yes| C[Show public page]
@@ -90,13 +90,13 @@ flowchart TD
     M --> N
     N --> O[Store in localStorage]
     O --> F
-\`\`\`
+```
 
 ---
 
 ## ⚽ Match Lifecycle
 
-\`\`\`mermaid
+```mermaid
 stateDiagram-v2
     [*] --> Scheduled : Admin creates match
     Scheduled --> Live : Admin clicks Go Live
@@ -104,7 +104,7 @@ stateDiagram-v2
     Live --> Finished : Admin clicks Full Time
     Finished --> [*]
     Scheduled --> [*] : Admin deletes match
-\`\`\`
+```
 
 ---
 
@@ -147,7 +147,7 @@ stateDiagram-v2
 
 ## 📁 Project Structure
 
-\`\`\`
+```
 prem_league_project_B00918889/
 ├── 📁 Backend/
 │   ├── app.py
@@ -178,7 +178,7 @@ prem_league_project_B00918889/
                 ├── 📁 services/
                 ├── 📁 guards/
                 └── 📁 models/
-\`\`\`
+```
 
 ---
 
@@ -186,23 +186,23 @@ prem_league_project_B00918889/
 
 ### 1️⃣ Backend
 
-\`\`\`bash
+```bash
 cd Backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 python app.py
-\`\`\`
+```
 
 ✅ Runs at http://127.0.0.1:5000
 
 ### 2️⃣ Frontend
 
-\`\`\`bash
+```bash
 cd frontend/prem-league-app
 npm install
 ng serve
-\`\`\`
+```
 
 ✅ Runs at http://localhost:4200
 
@@ -248,16 +248,16 @@ ng serve
 
 ## 🧪 Testing
 
-\`\`\`bash
+```bash
 cd frontend/prem-league-app
 npx vitest run
-\`\`\`
+```
 
-\`\`\`
+```
 Test Files  27 passed (27)
      Tests  73 passed (73)
   Duration  2.95s
-\`\`\`
+```
 
 | Service | Status |
 |---------|--------|
