@@ -1,13 +1,15 @@
-# ⚽ Football Premier League App
+python3 -c "
+content = open('/Users/faysal/prem_league_project_B00918889/README.md', 'w')
+content.write('''# ⚽ Football Premier League App
 
-<div align="center">
+<div align=\"center\">
 
 ![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-Python-000000?style=for-the-badge&logo=flask&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 
-**A full-stack Prmier League web application**
+**A full-stack Premier League web application**
 
 *COM661 Coursework 2 — Ulster University*
 
@@ -18,14 +20,14 @@
 ---
 
 ## 📌 Table of Contents
-
 - [Overview](#-overview)
 - [Architecture](#-architecture)
 - [Authentication Flow](#-authentication-flow)
+- [Match Lifecycle](#-match-lifecycle)
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
-- [Setup & Installation](#-setup--installation)
+- [Setup](#-setup--installation)
 - [API Reference](#-api-reference)
 - [Testing](#-testing)
 
@@ -75,14 +77,12 @@ graph TD
 \`\`\`mermaid
 flowchart TD
     A[User visits app] --> B{Public route?}
-    B -->|Yes - Landing/Login/Register| C[Show public page]
-    B -->|No - Protected route| D{JWT token exists?}
+    B -->|Yes| C[Show public page]
+    B -->|No| D{JWT token exists?}
     D -->|No| E[Redirect to Landing page]
-    D -->|Yes| F{Decode token - check role}
-    F -->|role: admin| G[Access admin routes]
-    F -->|role: user| H[Access user routes]
-    G --> I[Admin Dashboard]
-    H --> J[Home Dashboard]
+    D -->|Yes| F{Check role}
+    F -->|admin| G[Admin Dashboard]
+    F -->|user| H[Home Dashboard]
     C --> K{User action}
     K -->|Login| L[POST /api/auth/login]
     K -->|Register| M[POST /api/auth/register]
@@ -127,7 +127,7 @@ stateDiagram-v2
 | 📋 Dashboard | Season overview, live alert, bar chart |
 | 🏟️ Manage Teams | Full CRUD for all clubs |
 | 🏃 Manage Players | Full CRUD with position and team assignment |
-| 📅 Manage Matches | Schedule → Go Live → Update Score → Full Time |
+| 📅 Manage Matches | Schedule to Go Live to Update Score to Full Time |
 
 ---
 
@@ -149,12 +149,10 @@ stateDiagram-v2
 
 \`\`\`
 prem_league_project_B00918889/
-│
 ├── 📁 Backend/
-│   ├── app.py                    # Main Flask app and all routes
-│   ├── requirements.txt          # Python dependencies
-│   └── .env                      # Environment variables
-│
+│   ├── app.py
+│   ├── requirements.txt
+│   └── .env
 └── 📁 frontend/
     └── prem-league-app/
         └── src/
@@ -178,28 +176,15 @@ prem_league_project_B00918889/
                 │       ├── manage-players/
                 │       └── manage-matches/
                 ├── 📁 services/
-                │   ├── auth.ts
-                │   ├── teams.ts
-                │   ├── players.ts
-                │   └── matches.ts
                 ├── 📁 guards/
-                │   └── auth-guard.ts
                 └── 📁 models/
-                    ├── team.model.ts
-                    ├── player.model.ts
-                    └── match.model.ts
 \`\`\`
 
 ---
 
 ## ⚙️ Setup & Installation
 
-### Prerequisites
-- Node.js 18+
-- Python 3.9+
-- MongoDB Atlas account
-
-### 1️⃣ Backend Setup
+### 1️⃣ Backend
 
 \`\`\`bash
 cd Backend
@@ -209,9 +194,9 @@ pip install -r requirements.txt
 python app.py
 \`\`\`
 
-✅ Backend running at \`http://127.0.0.1:5000\`
+✅ Runs at http://127.0.0.1:5000
 
-### 2️⃣ Frontend Setup
+### 2️⃣ Frontend
 
 \`\`\`bash
 cd frontend/prem-league-app
@@ -219,7 +204,7 @@ npm install
 ng serve
 \`\`\`
 
-✅ Frontend running at \`http://localhost:4200\`
+✅ Runs at http://localhost:4200
 
 ---
 
@@ -228,36 +213,36 @@ ng serve
 ### Auth
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| POST | \`/api/auth/register\` | ❌ | Register new user |
-| POST | \`/api/auth/login\` | ❌ | Login and get JWT |
+| POST | /api/auth/register | ❌ | Register new user |
+| POST | /api/auth/login | ❌ | Login and get JWT |
 
 ### Teams
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| GET | \`/api/teams\` | ✅ User | Get all teams |
-| GET | \`/api/teams/:id\` | ✅ User | Get single team |
-| GET | \`/api/teams/table\` | ✅ User | Get league table |
-| POST | \`/api/teams\` | 🔒 Admin | Create team |
-| PUT | \`/api/teams/:id\` | 🔒 Admin | Update team |
-| DELETE | \`/api/teams/:id\` | 🔒 Admin | Delete team |
+| GET | /api/teams | ✅ User | Get all teams |
+| GET | /api/teams/:id | ✅ User | Get single team |
+| GET | /api/teams/table | ✅ User | Get league table |
+| POST | /api/teams | 🔒 Admin | Create team |
+| PUT | /api/teams/:id | 🔒 Admin | Update team |
+| DELETE | /api/teams/:id | 🔒 Admin | Delete team |
 
 ### Players
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| GET | \`/api/players\` | ✅ User | Get all players |
-| POST | \`/api/players\` | 🔒 Admin | Create player |
-| PUT | \`/api/players/:id\` | 🔒 Admin | Update player |
-| DELETE | \`/api/players/:id\` | 🔒 Admin | Delete player |
+| GET | /api/players | ✅ User | Get all players |
+| POST | /api/players | 🔒 Admin | Create player |
+| PUT | /api/players/:id | 🔒 Admin | Update player |
+| DELETE | /api/players/:id | 🔒 Admin | Delete player |
 
 ### Matches
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| GET | \`/api/matches\` | ✅ User | Get all matches |
-| POST | \`/api/matches\` | 🔒 Admin | Schedule match |
-| PUT | \`/api/matches/:id/start\` | 🔒 Admin | Go live |
-| PUT | \`/api/matches/:id/score\` | 🔒 Admin | Update score |
-| PUT | \`/api/matches/:id/finish\` | 🔒 Admin | Full time |
-| DELETE | \`/api/matches/:id\` | 🔒 Admin | Delete match |
+| GET | /api/matches | ✅ User | Get all matches |
+| POST | /api/matches | 🔒 Admin | Schedule match |
+| PUT | /api/matches/:id/start | 🔒 Admin | Go live |
+| PUT | /api/matches/:id/score | 🔒 Admin | Update score |
+| PUT | /api/matches/:id/finish | 🔒 Admin | Full time |
+| DELETE | /api/matches/:id | 🔒 Admin | Delete match |
 
 ---
 
@@ -289,11 +274,11 @@ Test Files  27 passed (27)
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| Primary Dark | \`#0a1628\` | Navbar, cards, badges |
-| Secondary Dark | \`#0d1f3c\` | Gradients |
-| Accent Green | \`#10b981\` | Hover, active, CTA |
-| Danger Red | \`#e63946\` | Delete, live matches |
-| Background | \`#f8f9fb\` | Page background |
+| Primary Dark | #0a1628 | Navbar, cards, badges |
+| Secondary Dark | #0d1f3c | Gradients |
+| Accent Green | #10b981 | Hover, active, CTA |
+| Danger Red | #e63946 | Delete, live matches |
+| Background | #f8f9fb | Page background |
 | Font | Inter | All text |
 
 ---
@@ -306,3 +291,13 @@ Test Files  27 passed (27)
 | 👤 User | user@test.com | user123 |
 
 ---
+
+## 📝 Academic Declaration
+
+This project was developed as part of COM661 Web Development coursework at Ulster University. All code was written by the student unless otherwise stated.
+
+**Student ID:** B00918889 | **Submission:** May 2026
+''')
+content.close()
+print('README.md created successfully!')
+" && cd /Users/faysal/prem_league_project_B00918889 && git add README.md && git commit -m "Add README with Mermaid diagrams" && git push
