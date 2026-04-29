@@ -1,8 +1,6 @@
-python3 -c "
-content = open('/Users/faysal/prem_league_project_B00918889/README.md', 'w')
-content.write('''# ⚽ Football Premier League App
+# ⚽ Football Premier League App
 
-<div align=\"center\">
+<div align="center">
 
 ![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-Python-000000?style=for-the-badge&logo=flask&logoColor=white)
@@ -23,7 +21,6 @@ content.write('''# ⚽ Football Premier League App
 - [Overview](#-overview)
 - [Architecture](#-architecture)
 - [Authentication Flow](#-authentication-flow)
-- [Match Lifecycle](#-match-lifecycle)
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
@@ -42,32 +39,13 @@ A fully functional Premier League management platform where users can track live
 ## 🏗️ Architecture
 
 ```mermaid
-graph TD
-    A[Client Browser] --> B[Angular 21 Frontend]
-    B --> C[HTTP REST API Calls]
-    C --> D[Flask REST API]
-    D --> E[JWT Middleware]
-    E --> F[MongoDB Atlas]
-    B --> B1[Pages]
-    B --> B2[Services]
-    B --> B3[Route Guards]
-    B1 --> B1a[Landing / Login / Register]
-    B1 --> B1b[Home / Teams / Players / Matches]
-    B1 --> B1c[Admin Dashboard / Manage Pages]
-    B2 --> B2a[AuthService]
-    B2 --> B2b[TeamsService]
-    B2 --> B2c[PlayersService]
-    B2 --> B2d[MatchesService]
-    B3 --> B3a[authGuard]
-    B3 --> B3b[adminGuard]
-    D --> D1[/api/auth]
-    D --> D2[/api/teams]
-    D --> D3[/api/players]
-    D --> D4[/api/matches]
-    F --> F1[(users)]
-    F --> F2[(teams)]
-    F --> F3[(players)]
-    F --> F4[(matches)]
+graph LR
+    A[Browser] --> B[Angular 21 Frontend]
+    B --> C[Flask REST API]
+    C --> D[MongoDB Atlas]
+    B --> E[authGuard]
+    B --> F[adminGuard]
+    C --> G[JWT Middleware]
 ```
 
 ---
@@ -90,20 +68,6 @@ flowchart TD
     M --> N
     N --> O[Store in localStorage]
     O --> F
-```
-
----
-
-## ⚽ Match Lifecycle
-
-```mermaid
-stateDiagram-v2
-    [*] --> Scheduled : Admin creates match
-    Scheduled --> Live : Admin clicks Go Live
-    Live --> Live : Admin updates score
-    Live --> Finished : Admin clicks Full Time
-    Finished --> [*]
-    Scheduled --> [*] : Admin deletes match
 ```
 
 ---
@@ -146,39 +110,36 @@ stateDiagram-v2
 ---
 
 ## 📁 Project Structure
-
-```
 prem_league_project_B00918889/
-├── 📁 Backend/
+├── Backend/
 │   ├── app.py
 │   ├── requirements.txt
 │   └── .env
-└── 📁 frontend/
-    └── prem-league-app/
-        └── src/
-            └── app/
-                ├── 📁 components/
-                │   ├── navbar/
-                │   └── footer/
-                ├── 📁 pages/
-                │   ├── landing/
-                │   ├── login/
-                │   ├── register/
-                │   ├── home/
-                │   ├── teams/
-                │   ├── team-detail/
-                │   ├── players/
-                │   ├── matches/
-                │   ├── settings/
-                │   └── admin/
-                │       ├── dashboard/
-                │       ├── manage-teams/
-                │       ├── manage-players/
-                │       └── manage-matches/
-                ├── 📁 services/
-                ├── 📁 guards/
-                └── 📁 models/
-```
+└── frontend/
+└── prem-league-app/
+└── src/
+└── app/
+├── components/
+│   ├── navbar/
+│   └── footer/
+├── pages/
+│   ├── landing/
+│   ├── login/
+│   ├── register/
+│   ├── home/
+│   ├── teams/
+│   ├── team-detail/
+│   ├── players/
+│   ├── matches/
+│   ├── settings/
+│   └── admin/
+│       ├── dashboard/
+│       ├── manage-teams/
+│       ├── manage-players/
+│       └── manage-matches/
+├── services/
+├── guards/
+└── models/
 
 ---
 
@@ -252,12 +213,9 @@ ng serve
 cd frontend/prem-league-app
 npx vitest run
 ```
-
-```
 Test Files  27 passed (27)
-     Tests  73 passed (73)
-  Duration  2.95s
-```
+Tests  73 passed (73)
+Duration  2.95s
 
 | Service | Status |
 |---------|--------|
@@ -291,13 +249,3 @@ Test Files  27 passed (27)
 | 👤 User | user@test.com | user123 |
 
 ---
-
-## 📝 Academic Declaration
-
-This project was developed as part of COM661 Web Development coursework at Ulster University. All code was written by the student unless otherwise stated.
-
-**Student ID:** B00918889 | **Submission:** May 2026
-''')
-content.close()
-print('README.md created successfully!')
-" && cd /Users/faysal/prem_league_project_B00918889 && git add README.md && git commit -m "Add README with Mermaid diagrams" && git push
