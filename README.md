@@ -110,38 +110,19 @@ flowchart TD
 ---
 
 ## 📁 Project Structure
-prem_league_project_B00918889/
-├── Backend/
-│   ├── app.py
-│   ├── requirements.txt
-│   └── .env
-└── frontend/
-└── prem-league-app/
-└── src/
-└── app/
-├── components/
-│   ├── navbar/
-│   └── footer/
-├── pages/
-│   ├── landing/
-│   ├── login/
-│   ├── register/
-│   ├── home/
-│   ├── teams/
-│   ├── team-detail/
-│   ├── players/
-│   ├── matches/
-│   ├── settings/
-│   └── admin/
-│       ├── dashboard/
-│       ├── manage-teams/
-│       ├── manage-players/
-│       └── manage-matches/
-├── services/
-├── guards/
-└── models/
 
----
+**Backend/**
+- app.py — Main Flask app and all routes
+- requirements.txt — Python dependencies
+- .env — Environment variables
+
+**frontend/prem-league-app/src/app/**
+- components/ — navbar, footer
+- pages/ — landing, login, register, home, teams, team-detail, players, matches, settings, admin
+- admin/ — dashboard, manage-teams, manage-players, manage-matches
+- services/ — auth, teams, players, matches
+- guards/ — auth-guard
+- models/ — team, player, match
 
 ## ⚙️ Setup & Installation
 
